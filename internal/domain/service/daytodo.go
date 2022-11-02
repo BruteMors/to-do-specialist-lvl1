@@ -2,19 +2,20 @@ package service
 
 import "to-do-specialist-lvl1/internal/domain/entity"
 
-type dayToDoStorage interface {
+type DayToDoStorage interface {
 	Add(date string, task string) error
 	DeleteOne(date string, task string) error
 	DeleteAll(date string) (int, error)
 	FindAllDate(date string) ([]string, error)
 	FindAll() ([]entity.DayToDo, error)
+	UpdateOne(date string, oldTask string, newTask string) error
 }
 
 type DayToDoService struct {
-	storage dayToDoStorage
+	storage DayToDoStorage
 }
 
-func NewDayToDoService(storage dayToDoStorage) *DayToDoService {
+func NewDayToDoService(storage DayToDoStorage) *DayToDoService {
 	return &DayToDoService{storage: storage}
 }
 
@@ -54,4 +55,12 @@ func (s *DayToDoService) FindAllTasks() ([]entity.DayToDo, error) {
 		return nil, err
 	}
 	return events, nil
+}
+
+func (s *DayToDoService) UpdateTaskByDate(date string, oldTask string, newTask string) error {
+	err := s.storage.UpdateOne(date, oldTask, newTask)
+	if err != nil {
+		return err
+	}
+	return nil
 }

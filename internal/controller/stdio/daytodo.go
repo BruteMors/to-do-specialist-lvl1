@@ -37,7 +37,7 @@ func (h *dayToDoHandler) GetCommand() (string, error) {
 
 func (h *dayToDoHandler) ParseCommand(str string) (bool, error) {
 	const commandLength = 3
-	strArray := strings.Split(str, " ")
+	strArray := strings.SplitN(str, " ", commandLength)
 	for len(strArray) < commandLength {
 		strArray = append(strArray, "")
 	}
